@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cass
+  labels:
+    app: css
+    type: cass
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      type: cass
+  template:
+    metadata:
+      name: cass
+      labels:
+        app: css
+        type: cass
+    spec:
+      containers:
+        - name: cassandra
+          image: cassandra:latest
+          ports:
+            - containerPort: 7000
+          resources:
+            limits:
+              memory: "12G"
+              cpu: "3.3"
+            requests:
+              memory: "300M"
+              cpu: "1.5"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cassandra
+spec:
+  type: ClusterIP
+  ports:
+    - targetPort: 9042
+      port: 9042
+  selector:
+    app: css
+    type: cass

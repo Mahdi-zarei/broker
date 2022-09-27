@@ -1,0 +1,72 @@
+version: '3.7'
+
+services:
+  broker:
+    deploy:
+      resources:
+        limits:
+          memory: 8048m
+          cpus: "16"
+        reservations:
+          memory: 8048m
+          cpus: "16"
+    container_name: broker
+    image: trying-broker
+    ports:
+      - 9000:9000
+      - 8000:8000
+
+
+  prometheus:
+    container_name: prometheus
+    image: prom/prometheus
+    ports:
+      - 9090:9090
+
+  grafana:
+    container_name: grafana
+    image: grafana/grafana-enterprise
+    ports:
+      - 3000:3000
+
+  jaeger:
+    container_name: jaeger
+    image: jaegertracing/all-in-one
+    ports:
+      - 5775:5775/udp
+      - 6831:6831/udp
+      - 6832:6832/udp
+      - 5778:5778
+      - 16686:16686
+      - 14268:14268
+      - 14250:14250
+      - 9411:9411
+
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin
+    ports:
+      - '5432:5432'
+    volumes:
+      - db:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4_container
+    restart: always
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: mahdi.zrei@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    volumes:
+      -  pgadmin4:/var/lib/pgadmin
+volumes:
+  db:
+    driver: local
+  pgadmin4:
+    driver: local
+

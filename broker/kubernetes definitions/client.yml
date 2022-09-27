@@ -1,0 +1,29 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: client
+  labels:
+    app: client
+    type: client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      type: client
+  template:
+    metadata:
+      name: client
+      labels:
+        app: client
+        type: client
+    spec:
+      containers:
+        - name: client
+          image: mahdizri/client
+          resources:
+            limits:
+              memory: "4G"
+              cpu: "2.2"
+            requests:
+              memory: "300M"
+              cpu: "1.5"

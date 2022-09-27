@@ -1,0 +1,68 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: brokersrv1
+  labels:
+    app: broker
+    type: broker1
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      type: broker1
+  template:
+    metadata:
+      name: brokersrv1
+      labels:
+        app: broker
+        type: broker1
+    spec:
+      containers:
+        - name: broker
+          image: mahdizri/brokercassandra
+          resources:
+            limits:
+              memory: "5G"
+              cpu: "5.5"
+            requests:
+              memory: "1G"
+              cpu: "1"
+          ports:
+            - containerPort: 9000
+            - containerPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: brokerip
+spec:
+  type: ClusterIP
+  ports:
+    - targetPort: 9000
+      port: 9000
+  selector:
+    app: broker
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: brokermetrics1
+spec:
+  type: ClusterIP
+  ports:
+    - targetPort: 8000
+      port: 8000
+  selector:
+    type: broker1
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: brokermetrics2
+spec:
+  type: ClusterIP
+  ports:
+    - targetPort: 8000
+      port: 8000
+  selector:
+    type: broker2
