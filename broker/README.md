@@ -1,4 +1,4 @@
-# Broekr Project
+# Broker Project
 
 # To deploy this broker you will need to create a PostgrSQL database with name "broker" and a table "messages" with fileds: identifier integer primary key, body text, creation timestamp without timezone, expiration integer, subject text.
 
